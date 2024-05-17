@@ -1,8 +1,8 @@
 #include "mpr121.h"
-#include <Wire.h>
+#include <Wire.h>;
 
-#define TOU_THRESH 60  // Adjusted for acrylic sensitivity
-#define REL_THRESH 30  // Adjusted for acrylic sensitivity
+#define TOU_THRESH 100  // Increase the value to make the sensor less sensitive
+#define REL_THRESH 50  // Increase the value to make the sensor less sensitive
 
 int irqpin = 2;  // Digital 2
 boolean touchStates[12]; //to keep track of the previous touch states
@@ -24,7 +24,7 @@ void loop(){
 void readTouchInputs(){
   if(!checkInterrupt()){
     //read the touch state from the MPR121
-    Wire.requestFrom(0x5A, 2); 
+    Wire.requestFrom(0x5A,2); 
     
     byte LSB = Wire.read();
     byte MSB = Wire.read();
@@ -55,13 +55,13 @@ void readTouchInputs(){
 void mpr121_setup(void){
   set_register(0x5A, ELE_CFG, 0x00); 
   
-  // Section A - Controls filtering when data is > baseline.
+  // Section A - Controls filtering when data is &gt; baseline.
   set_register(0x5A, MHD_R, 0x01);
   set_register(0x5A, NHD_R, 0x01);
   set_register(0x5A, NCL_R, 0x00);
   set_register(0x5A, FDL_R, 0x00);
 
-  // Section B - Controls filtering when data is < baseline.
+  // Section B - Controls filtering when data is &lt; baseline.
   set_register(0x5A, MHD_F, 0x01);
   set_register(0x5A, NHD_F, 0x01);
   set_register(0x5A, NCL_F, 0xFF);
@@ -85,10 +85,9 @@ void mpr121_setup(void){
   
   // Section F
   // Enable Auto Config and auto Reconfig
-  set_register(0x5A, ATO_CFG0, 0x0B); // Enable auto-configuration
-  set_register(0x5A, ATO_CFGU, 0xC9); // USL = (Vdd-0.7)/vdd*256 = 0xC9 @3.3V
-  set_register(0x5A, ATO_CFGL, 0x82); // LSL = 0.65*USL = 0x82 @3.3V
-  set_register(0x5A, ATO_CFGT, 0xB5); // Target = 0.9*USL = 0xB5 @3.3V
+  /*set_register(0x5A, ATO_CFG0, 0x0B);
+  set_register(0x5A, ATO_CFGU, 0xC9);  // USL = (Vdd-0.7)/vdd*256 = 0xC9 @3.3V   set_register(0x5A, ATO_CFGL, 0x82);  // LSL = 0.65*USL = 0x82 @3.3V
+  set_register(0x5A, ATO_CFGT, 0xB5);*/  // Target = 0.9*USL = 0xB5 @3.3V
   
   set_register(0x5A, ELE_CFG, 0x0C);
 }
