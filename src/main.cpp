@@ -24,6 +24,8 @@ int redValue = 0;
 
 const int buttonPin = 11;
 
+int volume;
+
 boolean isTouched()
 {
   return digitalRead(buttonPin) == HIGH;
@@ -65,6 +67,7 @@ void setupMp3(int port = 9600)
   mp3.begin(port);
 
   sendCommand(CMD_SEL_DEV, 0, DEV_TF);
+  volume = 0;
   delay(500);
   
   sendCommand(CMD_PLAY, 0, 0);
@@ -87,7 +90,8 @@ void loop()
     redValue = min(redValue + 1, 255); 
     Serial.println(redValue);
     DmxMaster.write(2, redValue);
-    sendCommand(CMD_VOLUME_UP, 0, 0);
+
+    volumeup();
   }
 
   // Decrease red value gradually
@@ -96,8 +100,26 @@ void loop()
     redValue = redValue - 1;
     DmxMaster.write(2, redValue);
 
-    sendCommand(CMD_VOLUME_DOWN, 0, 0);
+    volumedown();
   }
 
   delay(25);
+}
+
+void volumeup()
+{
+  if(volume < 30)
+  {
+    sendCommand(CMD_VOLUME_UP, 0, 0);
+    volume++;
+  }
+}
+
+void volumedown()
+{
+  if(volume > 0)
+  {
+    sendCommand(CMD_VOLUME_DOWN, 0, 0);
+    volume++;
+  }
 }
