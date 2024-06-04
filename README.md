@@ -9,5 +9,5 @@ When all 5 pillars are playing their own sounds they create a beautiful symphony
 ## Contributors
 
 <a href = "https://github.com/xl3ehindTim/delta-site/graphs/contributors">
-  <img src = "https://contrib.rocks/image?repo=xl3ehindTim/delta-site"/>
+  <img src = "https://contrib.rocks/image?repo=xl3ehindTim/glow-2024"/>
 </a>
