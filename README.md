@@ -6,6 +6,8 @@ Symphony of Life is a [GLOW](https://gloweindhoven.nl/en/) concept for the comin
 Our concept revolves around using beautiful pillars filled with light. When visitors touch these pillars they will bring them to life resulting in them glowing up and starting to play music! 
 When all 5 pillars are playing their own music they create a beautiful symphony creating this mysterious environment for visitors to dwell in!
 
+Are you looking for in-depth information? [Take a look at the wiki](https://github.com/xl3ehindTim/glow-2024/wiki).
+
 ## Contributors
 
 <a href = "https://github.com/xl3ehindTim/glow-2024/graphs/contributors">
