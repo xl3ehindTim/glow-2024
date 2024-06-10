@@ -8,6 +8,6 @@ When all 5 pillars are playing their own music they create a beautiful symphony 
 
 ## Contributors
 
-<a href = "https://github.com/xl3ehindTim/delta-site/graphs/contributors">
+<a href = "https://github.com/xl3ehindTim/glow-2024/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=xl3ehindTim/glow-2024"/>
 </a>
