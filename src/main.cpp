@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <DmxMaster.h>
 #include <SoftwareSerial.h>
+#include <Adafruit_VL53L1X.h>
 
 #include "touch.h"
 #include "dmxlighting.h"
@@ -28,7 +29,6 @@ void fadingIn(int maxBrightness, bool useMusic) {
         if (useMusic) {
             //Serial.println(calculateVolumeStep(MAX_BRIGHTNESS, 30, 5));
             volumeMP3(calculateVolumeStep(MAX_BRIGHTNESS, 30, 5));
-
 
             // volumeMP3(newVolume);
         }
@@ -68,8 +68,8 @@ void lifeless() {
 }
 
 void setup() {
-    Serial.begin(9600);
-    //Serial.println("Starting up...");
+    Serial.begin(115200);
+    Serial.println("Starting up...");
 
     setupMP3(9600);
     setupDmx();
