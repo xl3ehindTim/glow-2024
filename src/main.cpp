@@ -4,7 +4,7 @@
 #include <Adafruit_VL53L1X.h>
 
 #include "touch.h"
-#include "dmxlighting.h"
+#include "dmxLighting.h"
 #include "mp3Player.h"
 
 bool isLifeless = true;

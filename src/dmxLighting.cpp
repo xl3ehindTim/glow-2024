@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <DmxMaster.h>
 
-#include "dmxlighting.h"
+#include "dmxLighting.h"
 
 int channels[MAX_CHANNELS + 1] = {0};  // Define the array with an extra element to use 1-based indexing
 

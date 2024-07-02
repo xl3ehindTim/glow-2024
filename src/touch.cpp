@@ -2,9 +2,6 @@
 
 #include "touch.h"
 
-#define IRQ_PIN 4
-#define XSHUT_PIN 5
-
 bool lastInput = false;
 
 Adafruit_VL53L1X vl53 = Adafruit_VL53L1X(XSHUT_PIN, IRQ_PIN);
@@ -73,4 +70,6 @@ boolean isTouched()
     lastInput = false;
     return false;
   }
+
+  return false;
 }
