@@ -3,7 +3,7 @@
 #include <SoftwareSerial.h>
 
 #include "touch.h"
-#include "dmxlighting.h"
+#include "dmxLighting.h"
 #include "mp3Player.h"
 
 bool isLifeless = true;
