@@ -1,0 +1,26 @@
+name: Build Arduino Code with PlatformIO
+
+on:
+  pull_request:
+  # push:
+  #   branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use a cache for dependencies to improve build speed
+        uses: actions/cache@v3
+        with:
+          path: ~/.platformio/.cache
+          key: ${{ runner.os }}-pio-${{ hashFiles('platformio.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-
+
+      - name: Install PlatformIO
+        uses: platformio/actions@v1.7
+
+      - name: Build the Arduino project
+        run: pio run
