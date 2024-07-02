@@ -35,6 +35,7 @@ void setupTouch()
     if (!sensors[i].init())
     {
       Serial.print("Failed to detect and initialize sensor ");
+      Serial.print(i);
       while (1)
         ;
     }

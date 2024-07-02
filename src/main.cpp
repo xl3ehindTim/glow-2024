@@ -101,7 +101,7 @@ void loop()
     }
 
     int sensorTriggerValue = getSensorTriggerValue();
-
+    Serial.println(sensorTriggerValue);
     if (sensorTriggerValue > 0)
     {
         if (isLifeless)
@@ -112,8 +112,7 @@ void loop()
         }
         changeColor("purple");
 
-        // TODO: Change to sensorTriggerValue
-        fadingIn(MAX_BRIGHTNESS, true);
+        fadingIn(sensorTriggerValue, true);
         lastAlive = millis();
         delay(20);
     }
