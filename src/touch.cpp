@@ -18,10 +18,10 @@ void setupTouch()
   // Disable/reset all sensors/lights by driving their XSHUT pins low.
   for (uint8_t i = 0; i < sensorCount; i++)
   {
+    pinMode(xshutPins[i][0], OUTPUT);
     pinMode(xshutPins[i][1], OUTPUT);
-    pinMode(xshutPins[i][2], OUTPUT);
-    digitalWrite(xshutPins[i][1], LOW);
-    digitalWrite(xshutPins[i][2], LOW);
+    digitalWrite(xshutPins[i][0], LOW);
+    digitalWrite(xshutPins[i][1], HIGH);
   }
 
   // Enable, initialize, and start each sensor, one by one.
@@ -30,17 +30,18 @@ void setupTouch()
     // Stop driving this sensor's XSHUT low. This should allow the carrier
     // board to pull it high. (We do NOT want to drive XSHUT high since it is
     // not level shifted.) Then wait a bit for the sensor to start up.
-    pinMode(xshutPins[i][1], INPUT);
+    pinMode(xshutPins[i][0], INPUT);
     delay(10);
 
     sensors[i].setTimeout(500);
     if (!sensors[i].init())
     {
-      digitalWrite(xshutPins[i][2], HIGH);
       Serial.print("Failed to detect and initialize sensor ");
       Serial.print(i);
       while (1)
         ;
+    } else {
+      digitalWrite(xshutPins[i][1], LOW);
     }
 
     // Each sensor must have its address changed to a unique value other than
