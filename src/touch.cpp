@@ -66,6 +66,7 @@ int getSensorTriggerValue() {
         digitalWrite(xshutPins[i][1], HIGH);
       } else {
         lastInput[i] = false;
+        digitalWrite(xshutPins[i][1], LOW);
       }
     } else {
       // Sensor not dataReady, use lastInput state
