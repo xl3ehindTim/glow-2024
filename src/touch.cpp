@@ -63,6 +63,7 @@ int getSensorTriggerValue() {
       if (distance < 1200) {
         triggeredSensors++;
         lastInput[i] = true; 
+        digitalWrite(xshutPins[i][1], HIGH);
       } else {
         lastInput[i] = false;
       }
