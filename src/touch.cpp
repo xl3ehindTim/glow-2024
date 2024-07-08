@@ -1,75 +1,74 @@
-#include "Adafruit_VL53L1X.h"
-
 #include "touch.h"
+#include <VL53L1X.h>
+#include <Wire.h>
 
-bool lastInput = false;
+const uint8_t sensorCount = 3;
 
-Adafruit_VL53L1X vl53 = Adafruit_VL53L1X(XSHUT_PIN, IRQ_PIN);
+// The Arduino pin connected to the XSHUT pin of each sensor.
+const uint8_t xshutPins[sensorCount] = {8, 9, 10};
+
+int lastInput[sensorCount];
+
+VL53L1X sensors[sensorCount];
 
 void setupTouch()
 {
-  Serial.println("Setup touch");
   Wire.begin();
-  Serial.println("begin wire");
 
-  if (!vl53.begin(0x29, &Wire))
+  // Disable/reset all sensors by driving their XSHUT pins low.
+  for (uint8_t i = 0; i < sensorCount; i++)
   {
-    Serial.print(F("Error on init of VL sensor: "));
-    while (1) delay(10);
-  } else {
-    Serial.println("vl153");
+    pinMode(xshutPins[i], OUTPUT);
+    digitalWrite(xshutPins[i], LOW);
   }
 
-  if (!vl53.startRanging())
+  // Enable, initialize, and start each sensor, one by one.
+  for (uint8_t i = 0; i < sensorCount; i++)
   {
-    Serial.print(F("Couldn't start ranging: "));
-    Serial.println(vl53.vl_status);
-    while (1) delay(10);
-  } else {
-    Serial.println("Time of Flight on");
+    // Stop driving this sensor's XSHUT low. This should allow the carrier
+    // board to pull it high. (We do NOT want to drive XSHUT high since it is
+    // not level shifted.) Then wait a bit for the sensor to start up.
+    pinMode(xshutPins[i], INPUT);
+    delay(10);
+
+    sensors[i].setTimeout(500);
+    if (!sensors[i].init())
+    {
+      Serial.print("Failed to detect and initialize sensor ");
+      Serial.print(i);
+      while (1)
+        ;
+    }
+
+    // Each sensor must have its address changed to a unique value other than
+    // the default of 0x29 (except for the last one, which could be left at
+    // the default). To make it simple, we'll just count up from 0x2A.
+    sensors[i].setAddress(0x2A + i);
+    sensors[i].startContinuous(50);
   }
-
-  vl53.setTimingBudget(50);
-
-  /*
-  vl.VL53L1X_SetDistanceThreshold(100, 300, 3, 1);
-  vl.VL53L1X_SetInterruptPolarity(0);
-  */
 }
 
-boolean isTouched()
-{
-  int16_t distance;
+int getSensorTriggerValue() {
+  int triggeredSensors = 0;
 
-  if (!vl53.dataReady()) 
-  {
-    return lastInput;
+  for (int i = 0; i < sensorCount; i++) {
+    if (sensors[i].dataReady()) {
+      int16_t distance = sensors[i].read();
+      
+      // Check if the distance is within the trigger threshold (adjust threshold as needed)
+      if (distance < 1200) {
+        triggeredSensors++;
+        lastInput[i] = true; 
+      } else {
+        lastInput[i] = false;
+      }
+    } else {
+      // Sensor not dataReady, use lastInput state
+      triggeredSensors += lastInput[i];
+    }
   }
 
-  // new measurement for the taking!
-  if (vl53.dataReady())
-  {
-    distance = vl53.distance();
-    if (distance == -1)
-    {
-      lastInput = false;
-      return false;
-    }
-
-    // data is read out, time for another reading!
-    vl53.clearInterrupt();
-
-    Serial.println(distance);
-
-    if (distance < 1200)
-    {
-      lastInput = true;
-      return true;
-    }
-
-    lastInput = false;
-    return false;
-  }
-
-  return false;
+  // Calculate percentage of triggered sensors (0 - 100) based on amount of sensors
+  int triggerPercentage = (triggeredSensors * 100) / sensorCount;
+  return triggerPercentage;
 }
